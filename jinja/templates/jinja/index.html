@@ -1,0 +1,13 @@
+{% extends 'jinja/base.html' %}
+{% block content %}
+{% comment %} {{ data }} {% endcomment %}
+<ul>
+{% for family in data.birds %}
+	<li><b> {{family.family}}</b>
+	{% for members in family.members %}
+		<ul>{{ members }}</ul>
+	{% endfor %}
+	</li>
+{% endfor %}
+	</ul>
+{% endblock %}
