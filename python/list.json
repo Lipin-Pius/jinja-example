@@ -1,0 +1,193 @@
+[
+    {
+      "id": "25e4e6e8-8344-4ed4-9153-a2eec34a64a3",
+      "type": "amazon-s3",
+      "category": "storage",
+      "_def": {
+        "category": "amazon-s3",
+        "defaults": {
+          
+        }
+      }
+    },
+    {
+      "id": "e8f1f268-57b6-4b7b-9298-4e4bebde79b3",
+      "type": "conv2d",
+      "category": "network",
+      "_def": {
+        "category": "network",
+        "defaults": {
+          "filters": {
+            "value": "",
+            "required": "true"
+          },
+          "kernel_size": {
+            "value": "",
+            "required": "true"
+          },
+          "activation": {
+            "value": "",
+            "required": "true"
+          },
+          "input_shape": {
+            "value": "",
+            "required": "true"
+          }
+        }
+      },
+      "filters": "32",
+      "kernel_size": "(3,3)",
+      "activation": "relu",
+      "input_shape": ""
+    },
+    {
+      "id": "6403e94e-662b-4321-bb58-23bfba731b83",
+      "type": "conv2d",
+      "category": "network",
+      "_def": {
+        "category": "network",
+        "defaults": {
+          "filters": {
+            "value": "",
+            "required": "true"
+          },
+          "kernel_size": {
+            "value": "",
+            "required": "true"
+          },
+          "activation": {
+            "value": "",
+            "required": "true"
+          },
+          "input_shape": {
+            "value": "",
+            "required": "true"
+          }
+        }
+      },
+      "filters": "64",
+      "kernel_size": "(3,3)",
+      "activation": "relu",
+      "input_shape": ""
+    },
+    {
+      "id": "8eaa91da-1a32-49d7-a76c-bafe4657fc74",
+      "type": "maxpooling2d",
+      "category": "network",
+      "_def": {
+        "category": "network",
+        "defaults": {
+          "pool_size": {
+            "value": "",
+            "required": "true"
+          }
+        }
+      },
+      "pool_size": "(2,2)"
+    },
+    {
+      "id": "57886c8a-fb6c-476c-b067-1b637945c68f",
+      "type": "dropout",
+      "category": "network",
+      "_def": {
+        "category": "network",
+        "defaults": {
+          "rate": {
+            "value": "",
+            "required": "true"
+          }
+        }
+      },
+      "rate": "0.25"
+    },
+    {
+      "id": "2dbf3622-5c66-458f-8463-6b4e85d7afa0",
+      "type": "flatten",
+      "category": "network",
+      "_def": {
+        "category": "network",
+        "defaults": {
+          
+        }
+      }
+    },
+    {
+      "id": "98da4f56-6c90-40ce-8a4f-71e450072c99",
+      "type": "dense",
+      "category": "network",
+      "_def": {
+        "category": "network",
+        "defaults": {
+          "units": {
+            "value": "",
+            "required": "true"
+          },
+          "activation": {
+            "value": "",
+            "required": "true"
+          }
+        }
+      },
+      "units": "128",
+      "activation": "relu"
+    },
+    {
+      "id": "3bf5a626-1f2f-4500-b134-19ab1fbd115a",
+      "type": "dropout",
+      "category": "network",
+      "_def": {
+        "category": "network",
+        "defaults": {
+          "rate": {
+            "value": "",
+            "required": "true"
+          }
+        }
+      },
+      "rate": "0.5"
+    },
+    {
+      "id": "2a1d2adf-5221-4bcb-9301-f238117ddf39",
+      "type": "dense",
+      "category": "network",
+      "_def": {
+        "category": "network",
+        "defaults": {
+          "units": {
+            "value": "",
+            "required": "true"
+          },
+          "activation": {
+            "value": "",
+            "required": "true"
+          }
+        }
+      },
+      "units": "10",
+      "activation": "softmax"
+    },
+    {
+      "id": "91272e1e-fb2a-494d-a47f-6ed65088e396",
+      "type": "adam",
+      "category": "optimizer",
+      "_def": {
+        "category": "optimizer",
+        "defaults": {
+          
+        }
+      }
+    },
+    {
+      "id": "7c4af7e4-ae68-4cd6-83f6-c29c63b7ee41",
+      "type": "categorical_crossentropy",
+      "category": "loss",
+      "_def": {
+        "category": "loss",
+        "defaults": {
+          
+        }
+      }
+    }
+  ]
+  
+  
