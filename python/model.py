@@ -1,10 +1,12 @@
+#This is just a test
+#!/bin/python
 import pprint as pp
 import json
 from jinja2 import FileSystemLoader, Environment
 
 def translate(x):
       return {
-        'storage':'amazon-s3.storage',
+        'storage':'amazon-s3.storage', # I didn't know what to put here
         'network':'tf.layers',
         'relu':'tf.nn.relu',
         'softmax':'tf.nn.softmax',
