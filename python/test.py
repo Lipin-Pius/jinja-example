@@ -1,6 +1,6 @@
 import json
 import pprint as pp
-data = json.load(open('tes.json'));
+data = json.load(open('network.json'));
 #pp.pprint(data)
 #for item in data:
 #    pp.pprint(item)

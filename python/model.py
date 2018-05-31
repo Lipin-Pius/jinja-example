@@ -5,20 +5,48 @@ import json
 from jinja2 import FileSystemLoader, Environment
 
 def translate(x):
-      return {
+      data =  {
         'storage':'amazon-s3.storage', # I didn't know what to put here
         'network':'tf.layers',
         'relu':'tf.nn.relu',
         'softmax':'tf.nn.softmax',
         'optimizer':'tf.train.AdamOptimizer',
         'loss':'tf.losses'
-      }[x]
+      }
+      if x in data:
+            return data[x]
+      else:
+            return 0
 
 def dict_parse(dict1):
-      result=''
+      result = 'node = '
       result = result + translate(dict1['category'])
+      result = result + '.' + dict1['type'] + '('
       if dict1['_def']:
-            result = result + '.' + dict1['type']+'()'
+            keys = dict1.keys()
+            default = ['id', 'type', 'category', '_def']
+            # print '**********************************************'
+            for item in keys:
+                  value = dict1[item]
+                  if not value:
+                        value = '\'\''
+                  if item not in default and value:
+                        if result[-1] == ',':
+                              result = result + ' ' + item + '='
+                        else:
+                              if item not in default:
+                                    result = result + item  + '='
+                        x = translate(dict1[item])
+                        if x:
+                              result = result + x + ','
+                        else:
+                              result = result + dict1[item] + ','
+            if result[-1] == ',':
+                  result = result + 'node)'
+            elif result[-1] == '(':
+                  result = result + 'node)'
+            else:
+                  result = result + ', node)'
       return result;
 
 fileLoader = FileSystemLoader('pytemplates')
