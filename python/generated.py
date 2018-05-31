@@ -1,24 +1,12 @@
-import tensorflow as tf
+amazon-s3storage0 = amazon.ec2.fetch_data()
 
-
-node = amazon-s3.storage.amazon-s3(node)
-
-node = tf.layers.conv2d(filters=32, kernel_size=(3,3), activation=tf.nn.relu, input_shape=,node)
-
-node = tf.layers.conv2d(filters=64, kernel_size=(3,3), activation=tf.nn.relu, input_shape=,node)
-
-node = tf.layers.maxpooling2d(pool_size=(2,2),node)
-
-node = tf.layers.dropout(rate=0.25,node)
-
-node = tf.layers.flatten(node)
-
-node = tf.layers.dense(units=128, activation=tf.nn.relu,node)
-
-node = tf.layers.dropout(rate=0.5,node)
-
-node = tf.layers.dense(units=10, activation=tf.nn.softmax,node)
-
-node = tf.train.AdamOptimizer.adam(node)
-
-node = tf.losses.categorical_crossentropy(node)
+conv2dnetwork1 = tensorflow.layers.conv2d(amazon-s3storage0, filters = 32, kernel_size = (3,3), activation = tensorflow.nn.relu)
+conv2dnetwork2 = tensorflow.layers.conv2d(conv2dnetwork1, filters = 64, kernel_size = (3,3), activation = tensorflow.nn.relu)
+maxpooling2dnetwork3 = tensorflow.layers.max_pooling2d(conv2dnetwork2, pool_size = (2,2))
+dropoutnetwork4 = tensorflow.layers.dropout(maxpooling2dnetwork3, rate = 0.25)
+flattennetwork5 = tensorflow.layers.flatten(dropoutnetwork4)
+densenetwork6 = tensorflow.layers.dense(flattennetwork5, units = 128, activation = tensorflow.nn.relu)
+dropoutnetwork7 = tensorflow.layers.dropout(densenetwork6, rate = 0.5)
+densenetwork8 = tensorflow.layers.dense(dropoutnetwork7, units = 10, activation = tensorflow.nn.softmax)
+adamoptimizer9 = tensorflow.train.AdamOptimizer(densenetwork8)
+categorical_crossentropyloss10 = tensorflow.losses.categorical_crossentropy(adamoptimizer9)

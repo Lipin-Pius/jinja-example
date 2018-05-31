@@ -1,79 +1,108 @@
 #This is just a test
 #!/bin/python
-import pprint as pp
-import json
 from jinja2 import FileSystemLoader, Environment
 
-def translate(x):
-      data =  {
-        'storage':'amazon-s3.storage', # I didn't know what to put here
-        'network':'tf.layers',
-        'relu':'tf.nn.relu',
-        'softmax':'tf.nn.softmax',
-        'optimizer':'tf.train.AdamOptimizer',
-        'loss':'tf.losses'
-      }
-      if x in data:
-            return data[x]
-      else:
-            return 0
+import json
+import pprint as pp
 
-def dict_parse(dict1):
-      result = 'node = '
-      result = result + translate(dict1['category'])
-      result = result + '.' + dict1['type'] + '('
-      if dict1['_def']:
-            keys = dict1.keys()
-            default = ['id', 'type', 'category', '_def']
-            # print '**********************************************'
-            for item in keys:
-                  value = dict1[item]
-                  if not value:
-                        value = '\'\''
-                  if item not in default and value:
-                        if result[-1] == ',':
-                              result = result + ' ' + item + '='
-                        else:
-                              if item not in default:
-                                    result = result + item  + '='
-                        x = translate(dict1[item])
-                        if x:
-                              result = result + x + ','
-                        else:
-                              result = result + dict1[item] + ','
-            if result[-1] == ',':
-                  result = result + 'node)'
-            elif result[-1] == '(':
-                  result = result + 'node)'
-            else:
-                  result = result + ', node)'
-      return result;
 
-fileLoader = FileSystemLoader('pytemplates')
-templateEnvironment = Environment(loader = fileLoader)
+# Dictionary Used
+
+nodes = {}
+
+# Function Used
+
+def lookup_category(x):
+    return {
+        'network':'tensorflow.layers',
+        'optimizer':'tensorflow.train',
+        'loss':'tensorflow.losses',
+        'storage':'aws.ec2'
+    }[x]
+
+def lookup_type(x):
+    types={
+        'maxpooling2d':'max_pooling2d',
+        'adam':'AdamOptimizer'
+    }
+    if x in types:
+        return types[x]
+    else:
+        return x
+
+def parse_params(node, src):
+    keys = node['_def']['defaults'].keys()
+    input = nodes[src]['name']
+    parameter_list = input + ','
+    if 'activation' in keys:
+        node['activation']='tensorflow.nn.'+node['activation']
+    if any(keys):
+        for item in keys:
+            if node[item] is not "":
+                parameter_list = parameter_list + ' ' + item + ' = ' + node[item] + ','
+
+    return parameter_list[:-1]
 
 
 
-# def dict_lookup(dict1, x):
-#   return dict1[x];
+def link_to_nodes(link):
 
-result = {}
+    source_node = nodes[link['source']['id']]
+    target_node = nodes[link['target']['id']]
+    result = target_node['name'] + ' = ' + lookup_category(link['target']['category']) + '.' + lookup_type(link['target']['type']) + '(' + parse_params(link['target'],link['source']['id']) + ')'
+    nodes[link['target']['id']]['op'] = result
+    nodes[link['target']['id']]['complete'] = True
+    nodes[link['source']['id']]['target'] = link['target']['id']
 
-with open('list.json', 'r') as fp:
-  data=json.load(fp)
 
-# # pp.pprint(data)
+# pp.pprint(nodes)
 
-# # print(dict_lookup(data[1]['_def'], 'defaults'))
-j = 'a'
-for i in range (0,len(data)):
-      result[i]=dict_parse(data[i]);
-     
+def parse(start):
+    try:
+        return nodes[start]['op'] + '\n' + parse(nodes[start]['target'])
+    except Exception as e:
+        return ''
 
-template = templateEnvironment.get_template('python.py')
-output = template.render({'data': result})
-with open('generated.py', 'w') as fp:
-  fp.write(output)
-print(output)
+
+
+if __name__=='__main__':
+    # pp.pprint(data)
+    with open('network.json','r') as fp:
+        data = json.load(fp)
+
+
+
+    i = 0
+    for node in data['nodes']:
+        name = node['type'] + node['category'] + str(i)
+        nodes[node['id']]={'name':name,
+        'complete':False,
+        'op':'',
+        'target':''
+        }
+        i = i+1
+
+    # pp.pprint(nodes)
+    for item in data['links']:
+        link_to_nodes(item)
+
+
+
+    for item in data['links']:
+        if not(nodes[item['source']['id']]['complete']):
+            op = nodes[item['source']['id']]['name'] + ' = amazon.ec2.fetch_data()'
+            op = op + '\n' + parse(item['source']['id'])
+            break
+
+
+
+
+    # templateEnvironment = Environment(loader='file')
+    # template = templateEnvironment.get_template('python.py')
+    # output = template.render({'data': op})
+
+    with open('generated.py', 'w') as fp:
+      fp.write(op)
+    print(op)
 
 # pp.pprint(result)

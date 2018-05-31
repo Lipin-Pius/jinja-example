@@ -1,5 +1,3 @@
-import tensorflow as tf
+import tensorflow
 
-{% for item in data.keys() %}
-{{ data[item] }}
-{% endfor %}
+{{ data }}
